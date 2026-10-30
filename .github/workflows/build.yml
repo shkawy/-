@@ -11,8 +11,13 @@ jobs:
           java-version: 21
       - name: Merge template and mod
         run: |
-          unzip -q template.zip -d tpl
-          unzip -q shadowmod-src.zip -d dm
+          mkdir tpl dm
+          for z in *.zip; do
+            case "$z" in
+              shadowmod-src*) unzip -q "$z" -d dm ;;
+              *) unzip -q "$z" -d tpl ;;
+            esac
+          done
           P=$(dirname "$(find tpl -name gradlew | head -1)")
           rm -rf "$P/src/client" "$P/src/main/java" "$P/src/main/resources"
           mkdir -p "$P/src/main"
